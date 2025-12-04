@@ -25,8 +25,8 @@ async function fetchOne(givenId,givenDatabase,givenCollection) {
     const collection = db.collection(givenCollection)
 
     try {
-        const obtId = new ObjectId.createFromHexString(givenId)
-        const data = await collection.findOne({ _id: obtId })
+        const objId = new ObjectId.createFromHexString(givenId)
+        const data = await collection.findOne({ _id: objId })
         return data   
     } catch (error) {
         return ('errorrrr :',error)

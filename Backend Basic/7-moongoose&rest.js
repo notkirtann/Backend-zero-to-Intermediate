@@ -1,4 +1,4 @@
-import validator, { trim } from 'validator'
+import validator from 'validator'
 
 import mongoose from "mongoose";
 const url = 'mongodb://localhost:27017/task-manager-app';

@@ -289,3 +289,106 @@ redirectTo('admin');
 In this example, the `redirectTo` function uses exhaustive checks to ensure all possible `Role` values are handled. If a new role is added in the future, TypeScript will raise an error if it's not accounted for in the function, helping to maintain code correctness.
 
 Here third role 'superadmin' is not handled in the function. So, TypeScript will raise an error at the line `role;` indicating that not all cases are covered. This helps in maintaining code correctness and ensures that all possible values of the `Role` type are handled appropriately.
+
+## Types and Interfaces:
+Types and Interfaces: Both types and interfaces in TypeScript are used to define the shape of objects, but they have some differences in usage and capabilities.
+### Types
+Types: Types are more flexible and can represent primitive types, union types, intersection types, and more.
+
+Need of creating Type:
+```typescript
+function serveChai(order:{type : string, sugar : number}){
+    console.log(order);
+}
+function makeChai(order:{type : string, sugar : number}){
+    console.log(order);
+}
+// better way
+type ChaiOrder = {
+    type : string, 
+    sugar : number
+}
+function serveChaii(order:ChaiOrder){
+    console.log(order);
+}
+function makeChaii(order:ChaiOrder){
+    console.log(order);
+}
+
+```
+Problem with Type:
+```typescript
+//problem-1:
+ type CupSize = 'xs' | 'sm' | 'md' | 'lg'
+ class GingerChai implements CupSize{}
+//problem-2:
+type Response = {res: true} | {res: false}
+ class ResponseAPI implements Response{}
+```
+In above example, we cannot implement a type using a class. This is where interfaces come into play.
+### Interfaces
+Interfaces: Interfaces are specifically designed to define the shape of objects and can be implemented by classes. They support declaration merging, allowing multiple declarations with the same name to be combined.
+```typescript
+// eg solution-1:
+interface CupSizee {
+    size: 'xs' | 'sm' | 'md' | 'lg' 
+ } 
+ class GingerChai implements CupSizee{
+    size: "xs" | "sm" | "md" | "lg" = "sm"
+ }
+// eg solution-2:
+interface Responsee {
+    res: true | false
+}
+class ApiResponse implements Responsee {
+    res: boolean = true;
+}
+```
+## Union vs Intersection Types:
+Union Types: A union type allows a variable to hold values of multiple types. It is defined using the `|` operator.
+```typescript
+type teaType = 'lemon' | 'masala' | 'ginger' //@these are called literal types as we are defining the types
+function orderChai(tea:teaType) {
+    console.log(tea);
+}
+```
+Intersection Types: An intersection type combines multiple types into one. It is defined using the `&` operator.
+```typescript
+type BaseChai = {teaLeaves:number}
+type Extra = {masalaLevel: number}
+
+type SpecialChai = BaseChai & Extra
+const Tea:SpecialChai={
+    masalaLevel:1,
+    teaLeaves:2
+}
+```
+#### Optional in Types:
+```typescript
+type User = {
+    username:string
+    bio?:string
+}
+
+const u1:User ={
+    username:"notkirtann"
+}
+const u2:User={
+    username:"maikirtanhoon",
+    bio:'Hala Madrid Y nada Mas'
+}
+console.log(u1,'and',u2);
+```
+In this example, the `bio` property in the `User` type is optional, allowing objects of type `User` to either include or omit the `bio` property.
+#### Readonly in Types:
+```typescript
+type Config ={
+    readonly name:string
+    age:number
+}
+const Cfg:Config={
+    name:"notkirtann",
+    age:22
+}
+Cfg.name="MaiKirtanHoon" //---> Error: Cannot assign to 'name' because it is a read-only property.
+```
